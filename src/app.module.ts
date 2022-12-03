@@ -10,6 +10,11 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 // mongoose
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
+// entity
+import { User } from './user/user.entity';
+import { Profile } from './user/profile.entity';
+import { Role } from './role/role.entity';
+import { Log } from './log/log.entity';
 // env file
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
 
@@ -61,7 +66,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
           username: configService.get(ConfigEnum.DB_USERNAME),
           password: configService.get(ConfigEnum.DB_PASSWORD),
           database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [],
+          entities: [User, Profile, Role, Log],
           synchronize: true,
           logging: logFlag && process.env.NODE_ENV === 'development',
         } as TypeOrmModuleOptions;
