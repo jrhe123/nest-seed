@@ -10,10 +10,12 @@ export class UserController {
 
   @Get()
   getUsers(): any {
-    const db = this.configService.get(ConfigEnum.DB);
+    const env = process.env;
+    const db = this.configService.get(ConfigEnum.DB_DATABASE);
     return {
       msg: 'ok',
       db,
+      env,
     };
   }
 }

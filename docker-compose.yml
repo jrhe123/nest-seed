@@ -1,18 +1,19 @@
 version: '3.9'
 services:
-  backend:
-    build: .
-    ports:
-      - 8000:3000
-    volumes:
-      - .:/app
-    depends_on:
-      - db
+  # backend:
+  #   build: .
+  #   ports:
+  #     - 8000:3000
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - db
+  #     - mongo
   db:
     image: mysql:5.7.22
     restart: always
     environment:
-      MYSQL_DATABASE: ambassador
+      MYSQL_DATABASE: nest_seed
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
@@ -25,3 +26,17 @@ services:
     image: redis
     ports:
       - 63799:6379
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: nest_seed
+      MONGO_INITDB_USERNAME: root
+      MONGO_INITDB_PASSWORD: root
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    ports:
+      - 27018:27017
