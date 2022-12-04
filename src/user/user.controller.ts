@@ -1,4 +1,10 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 // pino logger
 // import { Logger } from 'nestjs-pino';
@@ -23,6 +29,9 @@ export class UserController {
     this.logger.error('UserController init');
     this.logger.debug('UserController init');
     this.logger.verbose('UserController init');
+
+    throw new HttpException('User is forbidden now', HttpStatus.FORBIDDEN);
+
     const users = await this.userService.find(
       {},
       {
