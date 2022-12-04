@@ -1,21 +1,39 @@
 import { Controller, Get } from '@nestjs/common';
-
-// config
-import { ConfigService } from '@nestjs/config';
-import { ConfigEnum } from 'src/enum/config.enum';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private configService: ConfigService) {}
+  constructor(private userService: UserService) {}
 
   @Get()
-  getUsers(): any {
-    const env = process.env;
-    const db = this.configService.get(ConfigEnum.DB_DATABASE);
+  async getUsers() {
+    const users = await this.userService.find(
+      {},
+      {
+        profile: true,
+      },
+    );
     return {
       msg: 'ok',
-      db,
-      env,
+      data: users,
+    };
+  }
+
+  @Get('/profile')
+  async getUserProfile() {
+    const userProfile = await this.userService.findUserProfile(1);
+    return {
+      msg: 'ok',
+      data: userProfile,
+    };
+  }
+
+  @Get('/logs')
+  async getUserLogs() {
+    const userLogs = await this.userService.findUserLogs(1);
+    return {
+      msg: 'ok',
+      data: userLogs,
     };
   }
 }

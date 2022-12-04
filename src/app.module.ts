@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 // modules
 import { UserModule } from './user/user.module';
+import { SharedModule } from './shared/shared.module';
 // mysql
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 // mongoose
@@ -92,6 +93,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
       },
     }),
     UserModule,
+    SharedModule,
   ],
   controllers: [],
   providers: [Logger],

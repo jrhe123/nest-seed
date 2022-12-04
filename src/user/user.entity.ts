@@ -2,12 +2,14 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToOne,
   OneToMany,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
 import { Log } from 'src/log/log.entity';
 import { Role } from 'src/role/role.entity';
+import { Profile } from './profile.entity';
 
 @Entity()
 export class User {
@@ -19,6 +21,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToOne(() => Profile, (profile) => profile.user)
+  profile: Profile;
 
   @OneToMany(() => Log, (log) => log.user)
   logs: Log[];
