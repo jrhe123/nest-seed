@@ -3,18 +3,19 @@ import {
   HttpAdapterHost,
   HttpException,
   HttpStatus,
-  LoggerService,
+  Logger,
 } from '@nestjs/common';
 import { ArgumentsHost, Catch } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import * as requestIp from 'request-ip';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  constructor(
-    private readonly logger: LoggerService,
-    private readonly httpAdapterHost: HttpAdapterHost,
-  ) {}
+  private logger = new Logger(AllExceptionFilter.name);
+
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();

@@ -3,8 +3,11 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Logger,
+  Inject,
+  // Logger,
+  LoggerService,
 } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { UserService } from './user.service';
 // pino logger
 // import { Logger } from 'nestjs-pino';
@@ -18,7 +21,11 @@ export class UserController {
   // WINSTON logger (from @nestjs/common)
   // private logger: Logger,
 
-  constructor(private userService: UserService, private logger: Logger) {
+  constructor(
+    private userService: UserService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private logger: LoggerService,
+  ) {
     this.logger.log('UserController init');
   }
 
@@ -29,8 +36,7 @@ export class UserController {
     this.logger.error('UserController init');
     this.logger.debug('UserController init');
     this.logger.verbose('UserController init');
-
-    throw new HttpException('User is forbidden now', HttpStatus.FORBIDDEN);
+    // throw new HttpException('User is forbidden now', HttpStatus.FORBIDDEN);
 
     const users = await this.userService.find(
       {},

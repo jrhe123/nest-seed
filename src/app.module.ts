@@ -5,8 +5,9 @@ import { ConfigEnum, LogEnum } from 'src/enum/config.enum';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 // modules
-import { UserModule } from './user/user.module';
 import { SharedModule } from './shared/shared.module';
+import { UserModule } from './user/user.module';
+import { LogModule } from './log/log.module';
 // mysql
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 // mongoose
@@ -124,6 +125,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
     }),
     UserModule,
     SharedModule,
+    LogModule,
   ],
   controllers: [],
   providers: [Logger],
