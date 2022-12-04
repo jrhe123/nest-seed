@@ -36,6 +36,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.7.5",
     "mysql2": "^2.3.3",
+    "nest-winston": "^1.8.0",
     "nestjs-pino": "^3.1.1",
     "pino": "^8.7.0",
     "pino-http": "^8.2.1",
@@ -44,7 +45,9 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
