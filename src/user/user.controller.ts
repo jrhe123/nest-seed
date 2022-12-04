@@ -1,14 +1,14 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
+// pino logger
+import { Logger } from 'nestjs-pino';
 
 @Controller('user')
 export class UserController {
-  // logger
-  private logger = new Logger(UserController.name);
+  // NESTJS logger
+  // private logger = new Logger(UserController.name);
 
-  constructor(private userService: UserService) {
-    this.logger.log('UserController init');
-  }
+  constructor(private userService: UserService, private logger: Logger) {}
 
   @Get()
   async getUsers() {

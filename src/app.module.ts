@@ -18,10 +18,38 @@ import { Role } from './role/role.entity';
 import { Log } from './log/log.entity';
 // env file
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
-
+// pino logger
+import { LoggerModule } from 'nestjs-pino';
+import { join } from 'path';
 @Global()
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          targets: [
+            process.env.NODE_ENV === 'development'
+              ? {
+                  level: 'info',
+                  target: 'pino-pretty',
+                  options: {
+                    colorize: true,
+                  },
+                }
+              : {
+                  level: 'info',
+                  target: 'pino-roll',
+                  options: {
+                    file: join('logs', 'log.txt'),
+                    frequency: 'daily', // hourly
+                    size: '10m',
+                    mkdir: true,
+                  },
+                },
+          ],
+        },
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath,
