@@ -9,8 +9,6 @@ import {
 } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { UserService } from './user.service';
-// pino logger
-// import { Logger } from 'nestjs-pino';
 
 @Controller('user')
 export class UserController {

@@ -1,7 +1,6 @@
 import { Global, Module, Logger } from '@nestjs/common';
 // config
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ConfigEnum, LogEnum } from 'src/enum/config.enum';
+import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 // modules
@@ -9,49 +8,17 @@ import { SharedModule } from './shared/shared.module';
 import { UserModule } from './user/user.module';
 import { LogModule } from './log/log.module';
 // mysql
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { connectionParams } from '../ormconfig';
 // mongoose
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-// entity
-import { User } from './user/user.entity';
-import { Profile } from './user/profile.entity';
-import { Role } from './role/role.entity';
-import { Log } from './log/log.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { mongoConnectionParams } from '../mongoconfig';
 // env file
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
-// pino logger
-// import { LoggerModule } from 'nestjs-pino';
-// import { join } from 'path';
 
 @Global()
 @Module({
   imports: [
-    // LoggerModule.forRoot({
-    //   pinoHttp: {
-    //     transport: {
-    //       targets: [
-    //         process.env.NODE_ENV === 'development'
-    //           ? {
-    //               level: 'info',
-    //               target: 'pino-pretty',
-    //               options: {
-    //                 colorize: true,
-    //               },
-    //             }
-    //           : {
-    //               level: 'info',
-    //               target: 'pino-roll',
-    //               options: {
-    //                 file: join('logs', 'log.txt'),
-    //                 frequency: 'daily', // hourly
-    //                 size: '10m',
-    //                 mkdir: true,
-    //               },
-    //             },
-    //       ],
-    //     },
-    //   },
-    // }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath,
@@ -85,44 +52,11 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
         LOG_LEVEL: Joi.string(),
       }),
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const logFlag = configService.get(LogEnum.LOG_ON) === true;
-        return {
-          type: configService.get(ConfigEnum.DB_TYPE),
-          host: configService.get(ConfigEnum.DB_HOST),
-          port: configService.get(ConfigEnum.DB_PORT),
-          username: configService.get(ConfigEnum.DB_USERNAME),
-          password: configService.get(ConfigEnum.DB_PASSWORD),
-          database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [User, Profile, Role, Log],
-          synchronize: true,
-          // NOTE: logging raw sql in console
-          logging: logFlag && process.env.NODE_ENV === 'development',
-        } as TypeOrmModuleOptions;
-      },
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const host = configService.get(ConfigEnum.MONGO_DB_HOST);
-        const port = configService.get(ConfigEnum.MONGO_DB_PORT);
-        const username = configService.get(ConfigEnum.MONGO_DB_USERNAME);
-        const password = configService.get(ConfigEnum.MONGO_DB_PASSWORD);
-        const database = configService.get(ConfigEnum.MONGO_DB_DATABASE);
-        const uri = username
-          ? `mongodb://${username}:${password}@${host}:${port}/${database}`
-          : `mongodb://${host}:${port}/${database}`;
-        return {
-          uri,
-          retryAttempts: Infinity,
-          retryDelay: 5000,
-        } as MongooseModuleOptions;
-      },
-    }),
+    // MYSQL
+    TypeOrmModule.forRoot(connectionParams),
+    // MONGO
+    MongooseModule.forRootAsync(mongoConnectionParams),
+    // modules
     UserModule,
     SharedModule,
     LogModule,
