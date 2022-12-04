@@ -36,4 +36,16 @@ export class UserController {
       data: userLogs,
     };
   }
+
+  @Get('/logsByGroup')
+  async getUserLogsByGroup() {
+    const userLogs = await this.userService.findUserLogsByGroupV2(1);
+    return {
+      msg: 'ok',
+      data: userLogs.map((ul) => ({
+        result: ul.result,
+        count: ul.count,
+      })),
+    };
+  }
 }

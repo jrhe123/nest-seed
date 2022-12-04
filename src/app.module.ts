@@ -59,7 +59,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const logFlag = configService.get(LogEnum.LOG_ON) === 'true';
+        const logFlag = configService.get(LogEnum.LOG_ON) === true;
         return {
           type: configService.get(ConfigEnum.DB_TYPE),
           host: configService.get(ConfigEnum.DB_HOST),
@@ -69,6 +69,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
           database: configService.get(ConfigEnum.DB_DATABASE),
           entities: [User, Profile, Role, Log],
           synchronize: true,
+          // NOTE: logging raw sql in console
           logging: logFlag && process.env.NODE_ENV === 'development',
         } as TypeOrmModuleOptions;
       },
