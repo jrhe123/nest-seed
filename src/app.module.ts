@@ -30,6 +30,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
         // mysql
         DB_PORT: Joi.number().default(3306),
         DB_HOST: Joi.alternatives().try(
+          Joi.string(),
           Joi.string().ip(),
           Joi.string().domain(),
         ),
@@ -40,6 +41,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
         DB_SYNC: Joi.boolean().default(false),
         // mongoose
         MONGO_DB_HOST: Joi.alternatives().try(
+          Joi.string(),
           Joi.string().ip(),
           Joi.string().domain(),
         ),
@@ -55,7 +57,9 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
     // MYSQL
     TypeOrmModule.forRoot(connectionParams),
     // MONGO
-    MongooseModule.forRootAsync(mongoConnectionParams),
+    MongooseModule.forRootAsync({
+      useFactory: () => mongoConnectionParams,
+    }),
     // modules
     UserModule,
     SharedModule,

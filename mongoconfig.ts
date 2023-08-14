@@ -23,7 +23,8 @@ function buildMongoConnectionOptions() {
     ? `mongodb://${username}:${password}@${host}:${port}/${database}`
     : `mongodb://${host}:${port}/${database}`;
   return {
-    uri,
+    // uri,
+    uri: 'mongodb://localhost:27018/nest_seed',
     retryAttempts: Infinity,
     retryDelay: 5000,
   } as MongooseModuleOptions;

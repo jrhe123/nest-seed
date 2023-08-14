@@ -44,3 +44,6 @@ lerna-debug.log*
 
 # config yaml
 /config/*
+
+# reference
+nodepress-main.zip

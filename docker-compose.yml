@@ -10,17 +10,16 @@ services:
   #     - db
   #     - mongo
   db:
-    image: mysql:5.7.22
+    image: mysql:5.7
     restart: always
     environment:
       MYSQL_DATABASE: nest_seed
-      MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - .dbdata:/var/lib/mysql
     ports:
-      - 33066:3306
+      - 33065:3306
 
   redis:
     image: redis
